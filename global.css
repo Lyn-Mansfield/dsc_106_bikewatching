@@ -2,7 +2,7 @@ html, body {
     font: 100%/1.5 system-ui, sans-serif;
     display: flex;
     flex-flow: column;
-    max-width: 80em;
+    max-width: 120em;
     min-height: 100vh;
     box-sizing: border-box;
     margin: auto;
@@ -19,8 +19,8 @@ h1 {
 }
 
 #map {
-  width: 100%; /* Adjust width to your desired size */
-  height: 100%; /* Adjust height to your desired size */
+  width: 120em; /* Adjust width to your desired size */
+  height: 80em; /* Adjust height to your desired size */
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow for effect */
   border-radius: 8px; /* Optional: rounded corners */
 }
