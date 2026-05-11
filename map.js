@@ -101,7 +101,7 @@ map.on('load', async () => {
                 .text(
                     `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`,
                 );
-        });
+        })
         .attr('r', (d) => radiusScale(d.totalTraffic)) // Radius, based on total traffic
         .attr('fill', 'steelblue') // Fill color
         .attr('stroke', 'white') // Border color
