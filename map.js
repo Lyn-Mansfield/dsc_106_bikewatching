@@ -50,33 +50,66 @@ map.on('load', async () => {
 
     let stations = jsonData.data.stations;
     console.log('Stations Array:', stations);
+
+    let trips;
+    try {
+        const csvUrl = "https://dsc106.com/labs/lab07/data/bluebikes-traffic-2024-03.csv";
+
+        // Await CSV fetch
+        trips = await d3.csv(csvUrl);
+
+        console.log('Loaded CSV Data:', trips); // Log to verify structure
+    } catch (error) {
+        console.error('Error loading CSV:', error); // Handle errors
+    }
+
+    const departures = d3.rollup(
+        trips,
+        (v) => v.length,
+        (d) => d.start_station_id,
+    );
+    const arrivals = d3.rollup(
+        trips,
+        (v) => v.length,
+        (d) => d.end_station_id,
+    );
+
+    stations = stations.map((station) => {
+        let id = station.short_name;
+        station.arrivals = arrivals.get(id) ?? 0;
+        station.departures = departures.get(id) ?? 0;
+        station.totalTraffic = station.arrivals + station.departures;
+        return station;
+    });
+
+    console.log('Stations with Traffic:', stations);
 });
 
 function getCoords(station) {
-  const point = new mapboxgl.LngLat(+station.lon, +station.lat); // Convert lon/lat to Mapbox LngLat
-  const { x, y } = map.project(point); // Project to pixel coordinates
-  return { cx: x, cy: y }; // Return as object for use in SVG attributes
+    const point = new mapboxgl.LngLat(+station.lon, +station.lat); // Convert lon/lat to Mapbox LngLat
+    const { x, y } = map.project(point); // Project to pixel coordinates
+    return { cx: x, cy: y }; // Return as object for use in SVG attributes
 }
 
 // Function to update circle positions when the map moves/zooms
 function updatePositions() {
-  circles
-    .attr('cx', (d) => getCoords(d).cx) // Set the x-position using projected coordinates
-    .attr('cy', (d) => getCoords(d).cy); // Set the y-position using projected coordinates
+    circles
+        .attr('cx', (d) => getCoords(d).cx) // Set the x-position using projected coordinates
+        .attr('cy', (d) => getCoords(d).cy); // Set the y-position using projected coordinates
 }
 
 const svg = d3.select('#map').select('svg');
 // Append circles to the SVG for each station
 const circles = svg
-  .selectAll('circle')
-  .data(stations)
-  .enter()
-  .append('circle')
-  .attr('r', 5) // Radius of the circle
-  .attr('fill', 'steelblue') // Circle fill color
-  .attr('stroke', 'white') // Circle border color
-  .attr('stroke-width', 1) // Circle border thickness
-  .attr('opacity', 0.8); // Circle opacity
+    .selectAll('circle')
+    .data(stations)
+    .enter()
+    .append('circle')
+    .attr('r', 5) // Radius of the circle
+    .attr('fill', 'steelblue') // Circle fill color
+    .attr('stroke', 'white') // Circle border color
+    .attr('stroke-width', 1) // Circle border thickness
+    .attr('opacity', 0.8); // Circle opacity
 
 // Initial position update when map loads
 updatePositions();
