@@ -60,7 +60,7 @@ map.on('load', async () => {
     } catch (error) {
         console.error('Error loading CSV:', error); // Handle errors
     }
-    
+
     const departures = d3.rollup(
         trips,
         (v) => v.length,
@@ -80,7 +80,7 @@ map.on('load', async () => {
         return station;
     });
     console.log('Stations with Traffic:', stations);
-    
+
     // Create a scale for circle radius based on total traffic
     const radiusScale = d3
         .scaleSqrt()
@@ -94,6 +94,14 @@ map.on('load', async () => {
         .data(stations)
         .enter()
         .append('circle')
+        .each(function (d) {
+            // Add <title> for browser tooltips
+            d3.select(this)
+                .append('title')
+                .text(
+                    `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`,
+                );
+        });
         .attr('r', (d) => radiusScale(d.totalTraffic)) // Radius, based on total traffic
         .attr('fill', 'steelblue') // Fill color
         .attr('stroke', 'white') // Border color
