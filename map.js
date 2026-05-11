@@ -48,33 +48,6 @@ map.on('load', async () => {
         console.error('Error loading JSON:', error); // Handle errors
     }
     let stations = jsonData.data.stations;
-    const svg = d3.select('#map').select('svg');
-    // Append circles to the SVG for each station
-    const circles = svg
-        .selectAll('circle')
-        .data(stations)
-        .enter()
-        .append('circle')
-        .attr('r', 5) // Radius of the circle
-        .attr('fill', 'steelblue') // Circle fill color
-        .attr('stroke', 'white') // Circle border color
-        .attr('stroke-width', 1) // Circle border thickness
-        .attr('opacity', 0.8); // Circle opacity
-    // Initial position update when map loads
-    updatePositions();
-
-    // Function to update circle positions when the map moves/zooms
-    function updatePositions() {
-        circles
-            .attr('cx', (d) => getCoords(d).cx) // Set the x-position using projected coordinates
-            .attr('cy', (d) => getCoords(d).cy); // Set the y-position using projected coordinates
-    }
-
-    // Reposition markers on map interactions
-    map.on('move', updatePositions); // Update during map movement
-    map.on('zoom', updatePositions); // Update during zooming
-    map.on('resize', updatePositions); // Update on window resize
-    map.on('moveend', updatePositions); // Final adjustment after movement ends
 
     let trips;
     try {
@@ -87,6 +60,7 @@ map.on('load', async () => {
     } catch (error) {
         console.error('Error loading CSV:', error); // Handle errors
     }
+    
     const departures = d3.rollup(
         trips,
         (v) => v.length,
@@ -106,6 +80,39 @@ map.on('load', async () => {
         return station;
     });
     console.log('Stations with Traffic:', stations);
+    
+    // Create a scale for circle radius based on total traffic
+    const radiusScale = d3
+        .scaleSqrt()
+        .domain([0, d3.max(stations, (d) => d.totalTraffic)])
+        .range([1, 25]);
+
+    const svg = d3.select('#map').select('svg');
+    // Append circles to the SVG for each station
+    const circles = svg
+        .selectAll('circle')
+        .data(stations)
+        .enter()
+        .append('circle')
+        .attr('r', (d) => radiusScale(d.totalTraffic)) // Radius, based on total traffic
+        .attr('fill', 'steelblue') // Fill color
+        .attr('stroke', 'white') // Border color
+        .attr('stroke-width', 1) // Border thickness
+        .attr('opacity', 0.8); // Opacity
+
+    // Function to update circle positions when the map moves/zooms
+    function updatePositions() {
+        circles
+            .attr('cx', (d) => getCoords(d).cx) // Set the x-position using projected coordinates
+            .attr('cy', (d) => getCoords(d).cy); // Set the y-position using projected coordinates
+    }
+    // Initial position update when map loads
+    updatePositions();
+    // Reposition markers on map interactions
+    map.on('move', updatePositions); // Update during map movement
+    map.on('zoom', updatePositions); // Update during zooming
+    map.on('resize', updatePositions); // Update on window resize
+    map.on('moveend', updatePositions); // Final adjustment after movement ends
 });
 
 function getCoords(station) {
