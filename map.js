@@ -47,9 +47,22 @@ map.on('load', async () => {
     } catch (error) {
         console.error('Error loading JSON:', error); // Handle errors
     }
-
     let stations = jsonData.data.stations;
-    console.log('Stations Array:', stations);
+    const svg = d3.select('#map').select('svg');
+    // Append circles to the SVG for each station
+    const circles = svg
+        .selectAll('circle')
+        .data(stations)
+        .enter()
+        .append('circle')
+        .attr('r', 5) // Radius of the circle
+        .attr('fill', 'steelblue') // Circle fill color
+        .attr('stroke', 'white') // Circle border color
+        .attr('stroke-width', 1) // Circle border thickness
+        .attr('opacity', 0.8); // Circle opacity
+    // Initial position update when map loads
+    updatePositions();
+
 
     let trips;
     try {
@@ -62,7 +75,6 @@ map.on('load', async () => {
     } catch (error) {
         console.error('Error loading CSV:', error); // Handle errors
     }
-
     const departures = d3.rollup(
         trips,
         (v) => v.length,
@@ -81,7 +93,6 @@ map.on('load', async () => {
         station.totalTraffic = station.arrivals + station.departures;
         return station;
     });
-
     console.log('Stations with Traffic:', stations);
 });
 
@@ -98,21 +109,6 @@ function updatePositions() {
         .attr('cy', (d) => getCoords(d).cy); // Set the y-position using projected coordinates
 }
 
-const svg = d3.select('#map').select('svg');
-// Append circles to the SVG for each station
-const circles = svg
-    .selectAll('circle')
-    .data(stations)
-    .enter()
-    .append('circle')
-    .attr('r', 5) // Radius of the circle
-    .attr('fill', 'steelblue') // Circle fill color
-    .attr('stroke', 'white') // Circle border color
-    .attr('stroke-width', 1) // Circle border thickness
-    .attr('opacity', 0.8); // Circle opacity
-
-// Initial position update when map loads
-updatePositions();
 // Reposition markers on map interactions
 map.on('move', updatePositions); // Update during map movement
 map.on('zoom', updatePositions); // Update during zooming
