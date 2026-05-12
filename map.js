@@ -123,7 +123,7 @@ map.on('load', async () => {
             d3.select(this)
                 .append('title')
                 .text(
-                    `${d.totalTraffic} trips (${d.departures} departures, ${d.arrivals} arrivals)`,
+                    `${d.totalTraffic} total trips, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) & ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})`,
                 );
         })
         .style('--departure-ratio', (d) =>
@@ -195,7 +195,17 @@ map.on('load', async () => {
             .style('--departure-ratio', (d) =>
                 stationFlow(d.departures / d.totalTraffic),
             )
-            .attr('r', (d) => radiusScale(d.totalTraffic)); // Update circle sizes
+            .attr('r', (d) => radiusScale(d.totalTraffic)) // Update circle sizes
+            .each(function (d) {
+                d3.select(this).select('title').remove(); // Remove existing title
+                d3.select(this) // Add new title with updated traffic information
+                    .append('title')
+                    .text(
+                        timeFilter === -1 ?
+                        `${d.totalTraffic} total trips, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) & ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})` : 
+                        `${d.totalTraffic} trips around ${formatTime(timeFilter)}, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) & ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})`
+                    );
+            });
     }
 
     const timeSlider = document.getElementById('time-slider');
