@@ -14,16 +14,19 @@
 </head>
 
 <body>
-    <header>
-        <h1>🚴🏼‍♀️ Boston Bike Watching</h1>
-        <p>Visualization depicting 2014 Bluebikes data of bike station activity in Boston.</p>
-    </header>
+    <div class="container">
+        <div></div> <!-- Spacer for layout -->
+        <header>
+            <h1>🚴🏼‍♀️ Boston Bike Watching</h1>
+            <p>Visualization depicting 2014 Bluebikes data of bike station activity in Boston.</p>
+        </header>
 
-    <label>
-        <input type=range min="-1" max="1440" value="-1" id="time-slider">
-        <em id="any-time">(Any Time)</em>
-        <time id="selected-time"></time>
-    </label>
+        <label>
+            <input type=range min="-1" max="1440" value="-1" id="time-slider">
+            <em id="any-time">(Any Time)</em>
+            <time id="selected-time"></time>
+        </label>
+    </div>
 
     <div id="map">
         <svg></svg>

@@ -24,6 +24,7 @@ header {
 
 h1 {
     color: #333;
+    margin: 0;
 }
 
 h3 {
@@ -38,7 +39,7 @@ label {
     align-items: center;
     flex-direction: column;
     margin-left: auto;
-    padding-bottom: 1em;
+    padding-top: 2em;
 
     font-size: 1.2em;
     color: #555;
@@ -58,7 +59,7 @@ label {
 
 #map {
     width: 120em;
-    height: 80em;
+    height: 60em;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     border: 8px double #32a1ce;
     border-radius: 32px;
@@ -101,7 +102,7 @@ label {
     div {
         background-color: var(--color);
         flex: 1;
-        padding: 0.5em 2em;
+        padding: 0.5em 2.5em;
 
         color: white;
         font-size: larger;
