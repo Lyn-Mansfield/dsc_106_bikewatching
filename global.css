@@ -21,13 +21,10 @@ h1 {
 
 #map {
     width: 120em;
-    /* Adjust width to your desired size */
     height: 80em;
-    /* Adjust height to your desired size */
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    /* Optional: subtle shadow for effect */
-    border-radius: 8px;
-    /* Optional: rounded corners */
+    border: 8px double #32a1ce;
+    border-radius: 32px;
 }
 
 #map svg {
@@ -38,10 +35,35 @@ h1 {
     pointer-events: none;
 
     circle {
-        fill: slategrey;
         fill-opacity: 0.6;
         stroke: white;
-        stroke-width: 1; 
-        pointer-events: auto; /* Allow circles to show stats data */
+        stroke-width: 1;
+        pointer-events: auto;
+        /* Allow circles to show stats data */
+
+        --color-departures: steelblue;
+        --color-arrivals: darkorange;
+        --color: color-mix(in oklch,
+                var(--color-departures) calc(100% * var(--departure-ratio)),
+                var(--color-arrivals));
+        fill: var(--color);
+    }
+}
+
+label {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: auto;
+    margin-top: 20px;
+    font-size: 1.2em;
+    color: #555;
+
+    em {
+        opacity: 0.75;
+    }
+
+    time {
+        display: block;
     }
 }
