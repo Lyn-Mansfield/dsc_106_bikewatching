@@ -8,6 +8,10 @@ body {
     box-sizing: border-box;
     margin: auto;
     padding: 1em;
+
+
+    --color-departures: steelblue;
+    --color-arrivals: darkorange;
 }
 
 header {
@@ -17,6 +21,29 @@ header {
 
 h1 {
     color: #333;
+}
+
+label {
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    margin-left: auto;
+    padding-bottom: 1em;
+
+    font-size: 1.2em;
+    color: #555;
+
+    input {
+        width: 16vw;
+    }
+
+    em {
+        opacity: 0.75;
+    }
+
+    time {
+        display: block;
+    }
 }
 
 #map {
@@ -35,35 +62,38 @@ h1 {
     pointer-events: none;
 
     circle {
+        fill: var(--color);
         fill-opacity: 0.6;
         stroke: white;
         stroke-width: 1;
         pointer-events: auto;
         /* Allow circles to show stats data */
-
-        --color-departures: steelblue;
-        --color-arrivals: darkorange;
-        --color: color-mix(in oklch,
-                var(--color-departures) calc(100% * var(--departure-ratio)),
-                var(--color-arrivals));
-        fill: var(--color);
     }
 }
 
-label {
+#map svg circle,
+.legend div {
+    --color: color-mix(in oklch,
+            var(--color-departures) calc(100% * var(--departure-ratio)),
+            var(--color-arrivals));
+}
+
+.legend {
     display: flex;
-    align-items: center;
-    flex-direction: column;
-    margin-left: auto;
-    margin-top: 20px;
-    font-size: 1.2em;
-    color: #555;
+    justify-content: space-around;
+    gap: 4px;
+    margin-block: 1em;
+    border: 4px solid #003073;
+    background-color: #003073;
+    border-radius: 32px;
+    overflow: hidden;
 
-    em {
-        opacity: 0.75;
-    }
+    div {
+        background-color: var(--color);
+        flex: 1;
+        padding: 0.5em 2em;
 
-    time {
-        display: block;
+        color: white;
+        font-size: larger;
     }
 }
