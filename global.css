@@ -4,7 +4,7 @@ body {
     display: flex;
     flex-flow: column;
     max-width: 120em;
-    min-height: 100vh;
+    height: 100%;
     box-sizing: border-box;
     margin: auto;
     padding: 1em;
@@ -16,6 +16,10 @@ body {
 
 header {
     text-align: center;
+
+    p {
+        font-size: large;
+    }
 }
 
 h1 {
@@ -23,9 +27,9 @@ h1 {
 }
 
 h3 {
-    display: flex; 
-    justify-content: center; 
-    font-size: larger; 
+    display: flex;
+    justify-content: center;
+    font-size: larger;
     margin-top: 1em;
 }
 
@@ -101,5 +105,32 @@ label {
 
         color: white;
         font-size: larger;
+    }
+}
+
+.container {
+    display: grid;
+    grid-template-columns: 1fr auto 1fr;
+    align-items: center;
+}
+
+.bike-lane-legend {
+    justify-self: end;
+
+    display: flex;
+    align-items: center;
+    margin-left: auto;
+    gap: 10px;
+
+    .bike-lane-swatch {
+        width: 4vw;
+        height: 8px;
+        background-color: #32D400;
+    }
+
+    span {
+        font-size: 1.2em;
+        font-weight: bold;
+        color: #555;
     }
 }
