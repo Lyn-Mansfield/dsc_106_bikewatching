@@ -15,7 +15,7 @@ const map = new mapboxgl.Map({
     style: 'mapbox://styles/mapbox/dark-v11', // Map style
     center: [-71.09415, 42.36027], // [longitude, latitude]
     zoom: 12, // Initial zoom level
-    minZoom: 5, // Minimum allowed zoom
+    minZoom: 6, // Minimum allowed zoom
     maxZoom: 18, // Maximum allowed zoom
 });
 
@@ -80,28 +80,20 @@ map.on('load', async () => {
         console.error('Error loading CSV:', error); // Handle errors
     }
 
-    const arrivals = d3.rollup(
-        trips,
-        (v) => v.length,
-        (d) => d.end_station_id,
-    );
-    const departures = d3.rollup(
-        trips,
-        (v) => v.length,
-        (d) => d.start_station_id,
-    );
-
     function computeStationTraffic(stations, trips) {
-        // Compute departures
+        // Compute arrivals and departures
+        const arrivals = d3.rollup(
+            trips,
+            (v) => v.length,
+            (d) => d.end_station_id,
+        );
         const departures = d3.rollup(
             trips,
             (v) => v.length,
             (d) => d.start_station_id,
         );
 
-        // Computed arrivals as you did in step 4.2
-
-        // Update each station..
+        // Update each station with filtered traffic data
         return stations.map((station) => {
             let id = station.short_name;
             station.arrivals = arrivals.get(id) ?? 0;
@@ -194,7 +186,8 @@ map.on('load', async () => {
 
         // Recompute station traffic based on the filtered trips
         const filteredStations = computeStationTraffic(stations, filteredTrips);
-        timeFilter === -1 ? radiusScale.range([1, 25]) : radiusScale.range([1, 30]); // Adjust radius range for better visibility when filtering
+        timeFilter === -1 ? radiusScale.range([1, 25]) : radiusScale.range([2, 50]); // Adjust radius range for better visibility when filtering
+
         // Update the scatterplot by adjusting the radius of circles
         circles
             .data(filteredStations, (d) => d.short_name) // Re-bind data with station ID as key
