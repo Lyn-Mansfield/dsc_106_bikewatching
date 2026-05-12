@@ -27,7 +27,7 @@ function getCoords(station) {
 }
 // Helper function to format minutes since midnight into a human-readable time
 function formatTime(minutes) {
-    const date = new Date(0, 0, 0, 0, minutes); // Set hours & minutes
+    const date = new Date(0, 0, 0, 0, minutes); // Set hours and minutes
     return date.toLocaleString('en-US', { timeStyle: 'short' }); // Format as HH:MM AM/PM
 }
 // Helper function to convert a Date object to minutes since midnight
@@ -123,7 +123,7 @@ map.on('load', async () => {
             d3.select(this)
                 .append('title')
                 .text(
-                    `${d.totalTraffic} total trips, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) & ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})`,
+                    `${d.totalTraffic} total trips, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) and ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})`,
                 );
         })
         .style('--departure-ratio', (d) =>
@@ -202,8 +202,8 @@ map.on('load', async () => {
                     .append('title')
                     .text(
                         timeFilter === -1 ?
-                        `${d.totalTraffic} total trips, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) & ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})` : 
-                        `${d.totalTraffic} trips around ${formatTime(timeFilter)}, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) & ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})`
+                        `${d.totalTraffic} total trips, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) and ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})` : 
+                        `${d.totalTraffic} trips around ${formatTime(timeFilter)}, ${(100 * d.departures / d.totalTraffic).toFixed(1)}% departures (${d.departures}) and ${(100 * d.arrivals / d.totalTraffic).toFixed(1)}% arrivals (${d.arrivals})`
                     );
             });
     }
